@@ -5,6 +5,8 @@ class Target {
   }
   
   show() {
+    noStroke()
+    fill(255,0,0, 180)
     circle(this.pos.x, this.pos.y, this.r*2);
   }
 }
