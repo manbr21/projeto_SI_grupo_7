@@ -5,7 +5,7 @@ function setup() {
   let rows = 16;
   let columns = 9;
   env = new Environment(windowWidth, windowHeight, rows, columns)
-  env.populateMatrix()
+  env.setup()
 }
 
 function draw() {

@@ -2,25 +2,54 @@ class Environment {
   constructor(w, h, rows, columns) {
     this.w = w
     this.h = h
-    this.vehicle = new Vehicle(this.w/2, this.h/2);
-    this.target = null
+
+    this.rows = rows
+    this.columns = columns
+    this.walkable = Array.from({ length: this.rows }, () => new Array(this.columns).fill(0));
+
+    for(let i = 0; i < this.rows; i++) {
+      for(let j = 0; j < this.columns; j++) {
+        const terrainTypes = Object.values(TerrainType);
+        const randomIndex = Math.floor(Math.random() * terrainTypes.length);
+        const randomType = terrainTypes[randomIndex];
+        
+        this.walkable[i][j] = new TerrainCells(new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5), randomType);
+      }
+    }    
+  }
+
+  setup() {
     this.foodCount = 0;
-    
     this.initialState = true
     this.currI = 0
     this.currJ = 0
+
+    let randomIFood, randomJFood;
+    do {
+      randomIFood = floor(random(this.rows))
+      randomJFood = floor(random(this.columns))
+    } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
+
+    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 16)
     
-    this.rows = rows
-    this.columns = columns
-    this.matrix = Array.from({ length: this.rows + 1 }, () => new Array(this.columns + 1).fill(0));
-    this.walkable = Array.from({ length: this.rows + 1 }, () => new Array(this.columns + 1).fill(0));
+    let randomIAgent, randomJAgent; 
+    do {
+      randomIAgent = floor(random(this.rows))
+      randomJAgent = floor(random(this.columns))
+    } while(this.walkable[randomIAgent][randomJAgent].terrainType === "Obstacle")
+
+    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y);
   }
   
   didVehicleReachFood() {
     if (this.vehicle.didReachTarget(this.target)) {
-      let randomI = floor(random(this.rows))
-      let randomJ = floor(random(this.columns))
-      this.target = new Target(this.walkable[randomI][randomJ].target.pos.x, this.walkable[randomI][randomJ].target.pos.y, 16)
+      let randomIFood, randomJFood;
+      do {
+        randomIFood = floor(random(this.rows))
+        randomJFood = floor(random(this.columns))
+      } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
+
+      this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 16)
       this.foodCount++;
       print("food:" + this.foodCount);
       
@@ -35,41 +64,19 @@ class Environment {
     this.vehicle.show();
   }
   
-  populateMatrix() {
-    for(let i = 0; i <= this.rows; i++) {
-      for(let j = 0; j <= this.columns; j++) {
-        this.matrix[i][j] = createVector(i*(this.w/this.rows), j*(this.h/this.columns))
-        if(i < this.rows && j < this.columns) {
-          const terrainTypes = Object.values(TerrainType);
-          const randomIndex = Math.floor(Math.random() * terrainTypes.length);
-          const randomType = terrainTypes[randomIndex];
-          this.walkable[i][j] = new TerrainCells(new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5), randomType)
-        }
-      }
-    }
-    let randomI = floor(random(this.rows))
-    let randomJ = floor(random(this.columns))
-    this.target = new Target(this.walkable[randomI][randomJ].target.pos.x, this.walkable[randomI][randomJ].target.pos.y, 16)
-  }
-  
   drawTarget() {
     this.target.show()
   }
   
   drawMatrix() {
-    for(let i = 0; i <= this.rows; i++) {
-      for(let j = 0; j <= this.columns; j++) {
-        noFill();
+    for(let i = 0; i < this.rows; i++) {
+      for(let j = 0; j < this.columns; j++) {
         stroke(255, 100);
-        rect(this.matrix[i][j].x, this.matrix[i][j].y, (this.w/this.rows), (this.h/this.columns));
-        
-        if(i < this.rows && j < this.columns) {
-          fill(this.walkable[i][j].color);
-          rect(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, (this.w/this.rows), (this.h/this.columns));
-          noStroke();
-          fill(255,255,255,50);
-          circle(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, this.walkable[i][j].target.r*2);
-        }
+        fill(this.walkable[i][j].color);
+        rect(this.walkable[i][j].target.pos.x - (this.w/this.rows)/2, this.walkable[i][j].target.pos.y - (this.h/this.columns)/2, (this.w/this.rows), (this.h/this.columns));
+        noStroke();
+        fill(255,255,255,50);
+        circle(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, this.walkable[i][j].target.r*2);
       }
     }
   }
