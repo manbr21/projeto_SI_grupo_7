@@ -14,8 +14,8 @@ function draw() {
   noStroke();
   
   env.didVehicleReachFood()
-  env.drawTarget()
-  env.drawVehicle()
   env.drawMatrix()
+  env.drawVehicle()
+  env.drawTarget()
   env.stateMachine()
 }
