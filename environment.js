@@ -20,7 +20,7 @@ class Environment {
     if (this.vehicle.didReachTarget(this.target)) {
       let randomI = floor(random(this.rows))
       let randomJ = floor(random(this.columns))
-      this.target = new Target(this.walkable[randomI][randomJ].pos.x, this.walkable[randomI][randomJ].pos.y, 16)
+      this.target = new Target(this.walkable[randomI][randomJ].target.pos.x, this.walkable[randomI][randomJ].target.pos.y, 16)
       this.foodCount++;
       print("food:" + this.foodCount);
       
@@ -40,13 +40,16 @@ class Environment {
       for(let j = 0; j <= this.columns; j++) {
         this.matrix[i][j] = createVector(i*(this.w/this.rows), j*(this.h/this.columns))
         if(i < this.rows && j < this.columns) {
-          this.walkable[i][j] = new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5)
+          const terrainTypes = Object.values(TerrainType);
+          const randomIndex = Math.floor(Math.random() * terrainTypes.length);
+          const randomType = terrainTypes[randomIndex];
+          this.walkable[i][j] = new TerrainCells(new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5), randomType)
         }
       }
     }
     let randomI = floor(random(this.rows))
     let randomJ = floor(random(this.columns))
-    this.target = new Target(this.walkable[randomI][randomJ].pos.x, this.walkable[randomI][randomJ].pos.y, 16)
+    this.target = new Target(this.walkable[randomI][randomJ].target.pos.x, this.walkable[randomI][randomJ].target.pos.y, 16)
   }
   
   drawTarget() {
@@ -61,9 +64,11 @@ class Environment {
         rect(this.matrix[i][j].x, this.matrix[i][j].y, (this.w/this.rows), (this.h/this.columns));
         
         if(i < this.rows && j < this.columns) {
+          fill(this.walkable[i][j].color);
+          rect(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, (this.w/this.rows), (this.h/this.columns));
           noStroke();
           fill(255,255,255,50);
-          circle(this.walkable[i][j].pos.x, this.walkable[i][j].pos.y, this.walkable[i][j].r*2);
+          circle(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, this.walkable[i][j].target.r*2);
         }
       }
     }
@@ -71,14 +76,14 @@ class Environment {
   
   stateMachine() {
     if(this.initialState) {
-      this.vehicle.seek(this.walkable[0][0]);
-      if (this.vehicle.didReachTarget(this.walkable[0][0])) {
+      this.vehicle.seek(this.walkable[0][0].target);
+      if (this.vehicle.didReachTarget(this.walkable[0][0].target)) {
         this.initialState = false;
       }
     } else {
-      this.vehicle.seek(this.walkable[this.currI][this.currJ]);
+      this.vehicle.seek(this.walkable[this.currI][this.currJ].target);
       
-      if(this.vehicle.didReachTarget(this.walkable[this.currI][this.currJ])) {
+      if(this.vehicle.didReachTarget(this.walkable[this.currI][this.currJ].target)) {
         if(this.currI % 2 == 0) {
           this.currJ += 1;
           if(this.currJ >= this.columns) {
