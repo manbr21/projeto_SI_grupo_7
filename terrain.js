@@ -24,7 +24,7 @@ class TerrainCells {
                 this.cost = 100
                 break;
             default:
-                this.color = color(100, 100, 105, alpha);
+                this.color = color(50);
                 this.cost = 100000000
                 break;
         }
