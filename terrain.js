@@ -9,6 +9,7 @@ class TerrainCells {
     constructor(target, terrainType) {
         let alpha = 50;
         this.target = target
+        this.terrainType = terrainType
         switch(terrainType) {
             case 'Sand':
                 this.color = color(194, 178, 128, alpha);
