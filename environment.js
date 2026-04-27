@@ -20,9 +20,8 @@ class Environment {
 
   setup() {
     this.foodCount = 0;
-    this.initialState = true
-    this.currI = 0
-    this.currJ = 0
+    this.currentSearch = null;
+    this.isSearching = false;
 
     let randomIFood, randomJFood;
     do {
@@ -39,6 +38,8 @@ class Environment {
     } while(this.walkable[randomIAgent][randomJAgent].terrainType === "Obstacle")
 
     this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y);
+
+    this.startNewSearch();
   }
   
   didVehicleReachFood() {
@@ -52,10 +53,8 @@ class Environment {
       this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 16)
       this.foodCount++;
       print("food:" + this.foodCount);
-      
-      this.currI = 0;
-      this.currJ = 0;
-      this.initialState = true;
+
+      this.startNewSearch();
     }
   }
   
@@ -70,46 +69,79 @@ class Environment {
   
   drawMatrix() {
     for(let i = 0; i < this.rows; i++) {
-      for(let j = 0; j < this.columns; j++) {
-        stroke(255, 100);
-        fill(this.walkable[i][j].color);
-        rect(this.walkable[i][j].target.pos.x - (this.w/this.rows)/2, this.walkable[i][j].target.pos.y - (this.h/this.columns)/2, (this.w/this.rows), (this.h/this.columns));
-        noStroke();
-        fill(255,255,255,50);
-        circle(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, this.walkable[i][j].target.r*2);
-      }
+        for(let j = 0; j < this.columns; j++) {
+          let cell = this.walkable[i][j];
+
+          let currentAlpha = 30;
+          
+          if (cell.isPath) currentAlpha = 255;
+          else if (cell.isVisited) currentAlpha = 150;
+          else if (cell.isFrontier) currentAlpha = 70;
+
+          cell.color.setAlpha(currentAlpha);
+
+          fill(cell.color)
+          stroke(255, 100);
+          rect(cell.target.pos.x - (this.w/this.rows)/2, cell.target.pos.y - (this.h/this.columns)/2, (this.w/this.rows), (this.h/this.columns));
+
+          fill(255,255,255,50);
+          circle(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, this.walkable[i][j].target.r*2);
+        }
     }
   }
-  
+
+  getCellIndex(pos) {
+    return createVector(
+        floor(pos.x / (this.w / this.rows)),
+        floor(pos.y / (this.h / this.columns))
+    );
+  }
+
+  startNewSearch() {
+    for(let i=0; i<this.rows; i++) {
+      for(let j=0; j<this.columns; j++) {
+          this.walkable[i][j].isVisited = false;
+          this.walkable[i][j].isFrontier = false;
+          this.walkable[i][j].isPath = false;
+      }
+    }
+
+    this.vehicle.vel.set(0, 0);
+    this.vehicle.acc.set(0, 0);
+
+    let startIdx = this.getCellIndex(this.vehicle.pos);
+    let targetIdx = this.getCellIndex(this.target.pos);
+
+    this.currentSearch = new DFS(startIdx, targetIdx, this.walkable);
+    
+    this.isSearching = true; 
+
+    this.pathIndex = 0
+  }
+
   stateMachine() {
-    if(this.initialState) {
-      this.vehicle.seek(this.walkable[0][0].target);
-      if (this.vehicle.didReachTarget(this.walkable[0][0].target)) {
-        this.initialState = false;
-      }
+    if (this.isSearching) {
+        if (frameCount % 15 == 0) {
+          this.currentSearch.step();
+          if (this.currentSearch.isFinished) {
+            this.isSearching = false;
+            for (let p of this.currentSearch.finalPath) {
+              this.walkable[p.x][p.y].isPath = true;
+            }
+          }
+        }
     } else {
-      this.vehicle.seek(this.walkable[this.currI][this.currJ].target);
-      
-      if(this.vehicle.didReachTarget(this.walkable[this.currI][this.currJ].target)) {
-        if(this.currI % 2 == 0) {
-          this.currJ += 1;
-          if(this.currJ >= this.columns) {
-            this.currI += 1;
-            this.currJ = this.columns - 1;
-          }
-        } else {
-          this.currJ -= 1;
-          if(this.currJ < 0) {
-            this.currI += 1;
-            this.currJ = 0;
+        if (this.currentSearch && this.currentSearch.finalPath && this.pathIndex < this.currentSearch.finalPath.length) {
+          let nextStep = this.currentSearch.finalPath[this.pathIndex];
+
+          let cell = this.walkable[nextStep.x][nextStep.y];
+
+          this.vehicle.seek(cell.target);
+
+          if (this.vehicle.didReachTarget(cell.target)) {
+            this.pathIndex++;
           }
         }
-        if(this.currI >= this.rows) {
-          this.currI = 0;
-          this.currJ = 0;
-          this.initialState = true;
-        }
-      }
-    } 
+    }
   }
 }

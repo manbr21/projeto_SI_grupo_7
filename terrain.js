@@ -7,9 +7,13 @@ const TerrainType = {
 
 class TerrainCells {
     constructor(target, terrainType) {
-        let alpha = 50;
+        let alpha = 30;
         this.target = target
         this.terrainType = terrainType
+        this.isVisited = false
+        this.isFrontier = false
+        this.isPath = false
+
         switch(terrainType) {
             case 'Sand':
                 this.color = color(194, 178, 128, alpha);
@@ -25,8 +29,13 @@ class TerrainCells {
                 break;
             default:
                 this.color = color(50);
-                this.cost = 100000000
+                this.cost = 100000000;
+                this.isObstacle = true;
                 break;
         }
+    }
+
+    setVisited(){
+        this.visited = true;
     }
 }
