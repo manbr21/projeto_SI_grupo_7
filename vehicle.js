@@ -4,7 +4,7 @@ class Vehicle {
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.maxSpeed = 6;
-    this.maxForce = 1.3;
+    this.maxForce = 15;
     this.r = r;
 
     this.isMoving = false;
@@ -57,6 +57,6 @@ class Vehicle {
   
   didReachTarget(target) {
     let d = p5.Vector.dist(this.pos, target.pos);
-    return d < this.r + target.r
+    return d < 10
   }
 }

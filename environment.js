@@ -44,6 +44,9 @@ class Environment {
   
   didVehicleReachFood() {
     if (this.vehicle.didReachTarget(this.target)) {
+
+      this.vehicle.pos.set(this.target.pos.x, this.target.pos.y);
+
       let randomIFood, randomJFood;
       do {
         randomIFood = floor(random(this.rows))
