@@ -131,6 +131,21 @@ class Environment {
           }
         }
     } else {
+        let currPos = this.getCellIndex(this.vehicle.pos)
+      
+        if (currPos.x >= 0 && currPos.x < this.rows && currPos.y >= 0 && currPos.y < this.columns) {
+          let currCell = this.walkable[currPos.x][currPos.y]
+          
+          if (currCell.terrainType == 'Sand') {
+              this.vehicle.maxSpeed = 6
+            } else if (currCell.terrainType == 'Quagmire') {
+              this.vehicle.maxSpeed = 3
+            } else {
+              this.vehicle.maxSpeed = 1.5
+            }
+        }
+
+
         if (this.currentSearch && this.currentSearch.finalPath && this.pathIndex < this.currentSearch.finalPath.length) {
           let nextStep = this.currentSearch.finalPath[this.pathIndex];
 
