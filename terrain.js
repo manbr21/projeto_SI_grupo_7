@@ -7,7 +7,7 @@ const TerrainType = {
 
 class TerrainCells {
     constructor(target, terrainType) {
-        let alpha = 30;
+        let alpha = 70;
         this.target = target
         this.terrainType = terrainType
         this.isVisited = false

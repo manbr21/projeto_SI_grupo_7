@@ -72,11 +72,11 @@ class Environment {
         for(let j = 0; j < this.columns; j++) {
           let cell = this.walkable[i][j];
 
-          let currentAlpha = 30;
+          let currentAlpha = 70;
           
           if (cell.isPath) currentAlpha = 255;
-          else if (cell.isVisited) currentAlpha = 150;
-          else if (cell.isFrontier) currentAlpha = 70;
+          else if (cell.isVisited) currentAlpha = 180;
+          else if (cell.isFrontier) currentAlpha = 100;
 
           cell.color.setAlpha(currentAlpha);
 
