@@ -29,7 +29,7 @@ class Environment {
       randomJFood = floor(random(this.columns))
     } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
 
-    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 8)
+    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 10)
     
     let randomIAgent, randomJAgent; 
     do {
@@ -37,7 +37,7 @@ class Environment {
       randomJAgent = floor(random(this.columns))
     } while(this.walkable[randomIAgent][randomJAgent].terrainType === "Obstacle")
 
-    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y, 8);
+    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y, 12);
 
     this.startNewSearch();
   }
@@ -71,20 +71,39 @@ class Environment {
     for(let i = 0; i < this.rows; i++) {
         for(let j = 0; j < this.columns; j++) {
           let cell = this.walkable[i][j];
-          
-          if (cell.terrainType != "Obstacle") {
-            let currentAlpha = 70;
-          
-            if (cell.isPath) currentAlpha = 255;
-            else if (cell.isVisited) currentAlpha = 180;
-            else if (cell.isFrontier) currentAlpha = 100;
-
-            cell.color.setAlpha(currentAlpha);
-          }
 
           fill(cell.color)
           stroke(0, 100);
           rect(cell.target.pos.x - (this.w/this.rows)/2, cell.target.pos.y - (this.h/this.columns)/2, (this.w/this.rows), (this.h/this.columns));
+          
+          if (cell.isPath) {
+            fill(255, 255, 255, 220);
+            stroke(0);
+            push();
+            translate(cell.target.pos.x, cell.target.pos.y);
+            rotate(PI / 4);
+            rectMode(CENTER);
+            let size = (this.w/this.rows) * 0.25;
+            rect(0, 0, size, size);
+            pop();
+          }
+          else if (cell.isFrontier) {
+            push(); // <-- ISOLA A CONFIGURAÇÃO
+            noFill();
+            stroke(230, 230, 230, 180); 
+            strokeWeight(2);
+            rectMode(CENTER); // Agora o CENTER só afeta a fronteira
+            
+            let size = (this.w/this.rows) * 0.8; 
+            rect(cell.target.pos.x, cell.target.pos.y, size, size, 2); 
+            
+            pop(); // <-- DEVOLVE A CONFIGURAÇÃO AO NORMAL (Salva o Grid)
+          }
+          else if (cell.isVisited) {
+            fill(0, 0, 0, 100); 
+            noStroke();
+            circle(cell.target.pos.x, cell.target.pos.y, (this.w/this.rows) * 0.2);
+          }
         }
     }
   }
@@ -102,6 +121,7 @@ class Environment {
           this.walkable[i][j].isVisited = false;
           this.walkable[i][j].isFrontier = false;
           this.walkable[i][j].isPath = false;
+          this.walkable[i][j].color.setAlpha(255)
       }
     }
 
@@ -152,6 +172,7 @@ class Environment {
 
           if (this.vehicle.didReachTarget(cell.target)) {
             this.pathIndex++;
+            cell.color.setAlpha(100)
           }
         }
     }
