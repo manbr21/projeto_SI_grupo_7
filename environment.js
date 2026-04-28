@@ -29,7 +29,7 @@ class Environment {
       randomJFood = floor(random(this.columns))
     } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
 
-    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 16)
+    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 8)
     
     let randomIAgent, randomJAgent; 
     do {
@@ -37,7 +37,7 @@ class Environment {
       randomJAgent = floor(random(this.columns))
     } while(this.walkable[randomIAgent][randomJAgent].terrainType === "Obstacle")
 
-    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y);
+    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y, 8);
 
     this.startNewSearch();
   }
@@ -50,7 +50,7 @@ class Environment {
         randomJFood = floor(random(this.columns))
       } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
 
-      this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 16)
+      this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 8)
       this.foodCount++;
       print("food:" + this.foodCount);
 
@@ -71,21 +71,20 @@ class Environment {
     for(let i = 0; i < this.rows; i++) {
         for(let j = 0; j < this.columns; j++) {
           let cell = this.walkable[i][j];
-
-          let currentAlpha = 70;
           
-          if (cell.isPath) currentAlpha = 255;
-          else if (cell.isVisited) currentAlpha = 180;
-          else if (cell.isFrontier) currentAlpha = 100;
+          if (cell.terrainType != "Obstacle") {
+            let currentAlpha = 70;
+          
+            if (cell.isPath) currentAlpha = 255;
+            else if (cell.isVisited) currentAlpha = 180;
+            else if (cell.isFrontier) currentAlpha = 100;
 
-          cell.color.setAlpha(currentAlpha);
+            cell.color.setAlpha(currentAlpha);
+          }
 
           fill(cell.color)
-          stroke(255, 100);
+          stroke(0, 100);
           rect(cell.target.pos.x - (this.w/this.rows)/2, cell.target.pos.y - (this.h/this.columns)/2, (this.w/this.rows), (this.h/this.columns));
-
-          fill(255,255,255,50);
-          circle(this.walkable[i][j].target.pos.x, this.walkable[i][j].target.pos.y, this.walkable[i][j].target.r*2);
         }
     }
   }
@@ -121,15 +120,13 @@ class Environment {
 
   stateMachine() {
     if (this.isSearching) {
-        if (frameCount % 15 == 0) {
-          this.currentSearch.step();
+        this.currentSearch.step();
           if (this.currentSearch.isFinished) {
             this.isSearching = false;
             for (let p of this.currentSearch.finalPath) {
               this.walkable[p.x][p.y].isPath = true;
             }
           }
-        }
     } else {
         let currPos = this.getCellIndex(this.vehicle.pos)
       
@@ -139,9 +136,9 @@ class Environment {
           if (currCell.terrainType == 'Sand') {
               this.vehicle.maxSpeed = 6
             } else if (currCell.terrainType == 'Quagmire') {
-              this.vehicle.maxSpeed = 3
+              this.vehicle.maxSpeed = 4
             } else {
-              this.vehicle.maxSpeed = 1.5
+              this.vehicle.maxSpeed = 2
             }
         }
 

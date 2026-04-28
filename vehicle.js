@@ -1,11 +1,11 @@
 class Vehicle {
-  constructor(x, y) {
+  constructor(x, y, r) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.maxSpeed = 6;
     this.maxForce = 1.3;
-    this.r = 22;
+    this.r = r;
 
     this.isMoving = false;
     this.pathIndex = 0;
