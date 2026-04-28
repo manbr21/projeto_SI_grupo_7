@@ -1,11 +1,14 @@
 class Vehicle {
-  constructor(x, y) {
+  constructor(x, y, r) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.maxSpeed = 6;
-    this.maxForce = 1.3;
-    this.r = 22;
+    this.maxForce = 15;
+    this.r = r;
+
+    this.isMoving = false;
+    this.pathIndex = 0;
   }
 
   seek(target) {
@@ -29,7 +32,7 @@ class Vehicle {
   }
 
   show() {
-    stroke(255);
+    stroke(0);
     strokeWeight(2);
     fill(255);
     push();
@@ -54,6 +57,6 @@ class Vehicle {
   
   didReachTarget(target) {
     let d = p5.Vector.dist(this.pos, target.pos);
-    return d < this.r + target.r
+    return d < 10
   }
 }
