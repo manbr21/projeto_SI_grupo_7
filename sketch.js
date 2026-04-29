@@ -2,8 +2,8 @@ let env
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  let rows = 16;
-  let columns = 9;
+  let rows = 48;
+  let columns = 27;
   env = new Environment(windowWidth, windowHeight, rows, columns)
   env.setup()
 }
