@@ -49,8 +49,6 @@ class Environment {
         randomJFood = floor(random(this.columns))
       } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
 
-      this.perlinNoiseGeneration();
-
       this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 8)
       this.foodCount++;
       print("food:" + this.foodCount);
@@ -177,13 +175,6 @@ class Environment {
           }
         }
     }
-  }
-
-  changeOffsetAndGenerate() {
-    this.noiseOffsetX = random(1000);
-    this.noiseOffsetY = random(1000);
-
-    this.perlinNoiseGeneration();
   }
 
   perlinNoiseGeneration() {
