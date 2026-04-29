@@ -6,15 +6,12 @@ class Environment {
     this.rows = rows
     this.columns = columns
     this.walkable = Array.from({ length: this.rows }, () => new Array(this.columns).fill(0));
-    this.t = 0;
 
-    for(let i = 0; i < this.rows; i++) {
-      for(let j = 0; j < this.columns; j++) {
-        const randomType = this.perlinNoiseGeneration();
-        
-        this.walkable[i][j] = new TerrainCells(new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5), randomType);
-      }
-    }    
+    this.noiseScale = 0.1;
+    this.noiseOffsetX = random(1000);
+    this.noiseOffsetY = random(1000);
+
+    this.perlinNoiseGeneration();
   }
 
   setup() {
@@ -51,6 +48,8 @@ class Environment {
         randomIFood = floor(random(this.rows))
         randomJFood = floor(random(this.columns))
       } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
+
+      this.perlinNoiseGeneration();
 
       this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 8)
       this.foodCount++;
@@ -180,19 +179,38 @@ class Environment {
     }
   }
 
+  changeOffsetAndGenerate() {
+    this.noiseOffsetX = random(1000);
+    this.noiseOffsetY = random(1000);
+
+    this.perlinNoiseGeneration();
+  }
+
   perlinNoiseGeneration() {
+    for(let i = 0; i < this.rows; i++) {
+      for(let j = 0; j < this.columns; j++) {
+        const randomType = this.singleElementGeneration(i, j);
+        
+        this.walkable[i][j] = new TerrainCells(new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5), randomType);
+      }
+    }
+  }
+
+  singleElementGeneration(i, j) {
     const terrainTypes = Object.values(TerrainType);
-    const n = noise(this.t);
 
-    this.t += 0.1;
+    const n = noise(
+      this.noiseOffsetX + i * this.noiseScale,
+      this.noiseOffsetY + j * this.noiseScale
+    );
 
-    if (n < 0.3) {
+    if (n < 0.35) {
       return terrainTypes[0];
     }
     else if (n < 0.5) {
       return terrainTypes[1];
     }
-    else if (n < 0.7) {
+    else if (n < 0.65) {
       return terrainTypes[2];
     }
     else {
