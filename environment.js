@@ -7,15 +7,11 @@ class Environment {
     this.columns = columns
     this.walkable = Array.from({ length: this.rows }, () => new Array(this.columns).fill(0));
 
-    for(let i = 0; i < this.rows; i++) {
-      for(let j = 0; j < this.columns; j++) {
-        const terrainTypes = Object.values(TerrainType);
-        const randomIndex = Math.floor(Math.random() * terrainTypes.length);
-        const randomType = terrainTypes[randomIndex];
-        
-        this.walkable[i][j] = new TerrainCells(new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5), randomType);
-      }
-    }    
+    this.noiseScale = 0.1;
+    this.noiseOffsetX = random(1000);
+    this.noiseOffsetY = random(1000);
+
+    this.perlinNoiseGeneration();
   }
 
   setup() {
@@ -178,6 +174,38 @@ class Environment {
             cell.color.setAlpha(100)
           }
         }
+    }
+  }
+
+  perlinNoiseGeneration() {
+    for(let i = 0; i < this.rows; i++) {
+      for(let j = 0; j < this.columns; j++) {
+        const randomType = this.singleElementGeneration(i, j);
+        
+        this.walkable[i][j] = new TerrainCells(new Target(i*(this.w/this.rows) + (this.w/this.rows)/2, j*(this.h/this.columns) + (this.h/this.columns)/2, 5), randomType);
+      }
+    }
+  }
+
+  singleElementGeneration(i, j) {
+    const terrainTypes = Object.values(TerrainType);
+
+    const n = noise(
+      this.noiseOffsetX + i * this.noiseScale,
+      this.noiseOffsetY + j * this.noiseScale
+    );
+
+    if (n < 0.35) {
+      return terrainTypes[0];
+    }
+    else if (n < 0.5) {
+      return terrainTypes[1];
+    }
+    else if (n < 0.65) {
+      return terrainTypes[2];
+    }
+    else {
+      return terrainTypes[3];
     }
   }
 }
