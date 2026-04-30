@@ -18,25 +18,22 @@ class Environment {
     this.foodCount = 0;
     this.currentSearch = null;
     this.isSearching = false;
-    this.initialAgentPos = null;
 
     let randomIFood, randomJFood;
     do {
       randomIFood = floor(random(this.rows))
       randomJFood = floor(random(this.columns))
-      this.initialFoodPos = createVector(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y);
     } while(this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
 
-    this.target = new Target(this.initialFoodPos.x, this.initialFoodPos.y, 10)
+    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 10)
     
     let randomIAgent, randomJAgent; 
     do {
       randomIAgent = floor(random(this.rows))
       randomJAgent = floor(random(this.columns))
-      this.initialAgentPos = createVector(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y);
     } while(this.walkable[randomIAgent][randomJAgent].terrainType === "Obstacle")
 
-    this.vehicle = new Vehicle(this.initialAgentPos.x, this.initialAgentPos.y, 12);
+    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y, 12);
 
     this.startNewSearch();
   }
@@ -110,33 +107,6 @@ class Environment {
     }
   }
 
-resetEnvironment() {
-
-    for(let i = 0; i < this.rows; i++) {
-      for(let j = 0; j < this.columns; j++) {
-          this.walkable[i][j].isVisited = false;
-          this.walkable[i][j].isFrontier = false;
-          this.walkable[i][j].isPath = false;
-          this.walkable[i][j].color.setAlpha(255);
-      }
-    }
-
-    // Interrompe a busca
-    this.currentSearch = null;
-    this.isSearching = false;
-    this.pathIndex = 0;
-
-    // Para o agente
-    this.vehicle.vel.set(0, 0);
-    this.vehicle.acc.set(0, 0);
-
-    //Seta o agente e a comida para a posição original 
-    this.vehicle.pos.set(this.initialAgentPos.x, this.initialAgentPos.y);
-    this.target.pos.set(this.initialFoodPos.x, this.initialFoodPos.y);
-
-    this.startNewSearch();
-  }
-
   getCellIndex(pos) {
     return createVector(
         floor(pos.x / (this.w / this.rows)),
@@ -160,50 +130,12 @@ resetEnvironment() {
     let startIdx = this.getCellIndex(this.vehicle.pos);
     let targetIdx = this.getCellIndex(this.target.pos);
     
-    //Seleção do algoritmo de busca
-    const botaoDFS = document.getElementById('btnDFS');
-    const botaoBFS = document.getElementById('btnBFS');
-    const botaoAStar = document.getElementById('btnAStar');
-    const botaoDijkstra = document.getElementById('btnDijkstra');
-    const botaoGreedy = document.getElementById('btnGreedy');
-    const botaoReset = document.getElementById('btnReset');
+    env.currentSearch = new DFS(startIdx, targetIdx, env.walkable);
+    
+    this.isSearching = true
+  }
 
-    botaoDFS.addEventListener('click', () => {
-        env.currentSearch = new DFS(startIdx, targetIdx, env.walkable);
-        env.isSearching = true; 
-        env.pathIndex = 0;
-    });
-
-    botaoBFS.addEventListener('click', () => {
-        env.currentSearch = new BFS(startIdx, targetIdx, env.walkable); 
-        env.isSearching = true; 
-        env.pathIndex = 0;
-    });
-
-    botaoAStar.addEventListener('click', () => {
-        env.currentSearch = new AStar(startIdx, targetIdx, env.walkable);
-        env.isSearching = true;
-        env.pathIndex = 0;
-    });
-
-    botaoDijkstra.addEventListener('click', () => {
-        env.currentSearch = new BCU(startIdx, targetIdx, env.walkable);
-        env.isSearching = true;
-        env.pathIndex = 0;
-    });
-
-    botaoGreedy.addEventListener('click', () => {
-        env.currentSearch = new GreedySearch(startIdx, targetIdx, env.walkable);
-        env.isSearching = true;
-        env.pathIndex = 0;
-    });
-
-    botaoReset.addEventListener('click', () => {
-        env.resetEnvironment();
-    });
-}
-
-stateMachine() {
+  stateMachine() {
     if (this.isSearching) {
         this.currentSearch.step();
           if (this.currentSearch.isFinished) {
