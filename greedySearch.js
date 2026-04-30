@@ -4,22 +4,23 @@ class GreedySearch {
         this.target = target;
         this.matrix = matrix;
 
-        this.list = [ { pos: initial_pos, path: [] } ];
-        
+        this.queue = new PriorityQueue();
+        this.queue.push({ pos: initial_pos, path: [] } , this.heuristicFunction(initial_pos));
+
         this.isFinished = false;
         this.finalPath = [];
     }
 
     step() {
-        if (this.isFinished || this.list.length === 0) return;
+        if (this.isFinished || this.queue.isEmpty()) return;
 
-        let current = this.list.pop();
-        let x = current.pos.x;
-        let y = current.pos.y;
+        let current = this.queue.pop();
+        let x = current.value.pos.x;
+        let y = current.value.pos.y;
 
         if(x === this.target.x && y === this.target.y) {
             this.isFinished = true;
-            this.finalPath = [...current.path, createVector(x, y)]; 
+            this.finalPath = [...current.value.path, createVector(x, y)]; 
             return;
         }
 
@@ -33,15 +34,10 @@ class GreedySearch {
             createVector(x - 1, y)
         ];
 
-        neighbors.sort((a, b) => this.heuristicFunction(b) - this.heuristicFunction(a));
-
-        for (let n of neighbors) {
+        for(let n of neighbors){
             if (this.canVisit(n.x, n.y)) {
                 this.matrix[n.x][n.y].isFrontier = true;
-                
-                let newPath = [...current.path, createVector(x, y)];
-                
-                this.list.push({ pos: n, path: newPath });
+                this.queue.push({ pos: n, path: [...current.value.path, createVector(x, y)] }, this.heuristicFunction(n));
             }
         }
     }
