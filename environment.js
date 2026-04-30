@@ -90,16 +90,16 @@ class Environment {
             pop();
           }
           else if (cell.isFrontier) {
-            push(); // <-- ISOLA A CONFIGURAÇÃO
+            push(); 
             noFill();
-            stroke(230, 230, 230, 180); 
+            stroke(230, 230, 230, 220); 
             strokeWeight(2);
-            rectMode(CENTER); // Agora o CENTER só afeta a fronteira
+            rectMode(CENTER); 
             
             let size = (this.w/this.rows) * 0.8; 
             rect(cell.target.pos.x, cell.target.pos.y, size, size, 2); 
             
-            pop(); // <-- DEVOLVE A CONFIGURAÇÃO AO NORMAL (Salva o Grid)
+            pop(); 
           }
           else if (cell.isVisited) {
             fill(0, 0, 0, 100); 
@@ -187,13 +187,13 @@ resetEnvironment() {
     });
 
     botaoDijkstra.addEventListener('click', () => {
-        env.currentSearch = new Dijkstra(startIdx, targetIdx, env.walkable);
+        env.currentSearch = new BCU(startIdx, targetIdx, env.walkable);
         env.isSearching = true;
         env.pathIndex = 0;
     });
 
     botaoGreedy.addEventListener('click', () => {
-        env.currentSearch = new Greedy(startIdx, targetIdx, env.walkable);
+        env.currentSearch = new GreedySearch(startIdx, targetIdx, env.walkable);
         env.isSearching = true;
         env.pathIndex = 0;
     });
