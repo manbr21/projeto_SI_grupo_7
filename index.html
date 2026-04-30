@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulação de Agentes Autônomos</title>
 
+    <style>
+    .btn {
+        background-color: #4CAF50; 
+        color: white;             
+        padding: 12px 24px;        
+        font-size: 16px;           
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        
+        border: none;              /*Remove a borda padrão do navegador*/
+        border-radius: 8px;        /*Deixa os cantos arredondados*/
+        cursor: pointer;           /*Muda a setinha do mouse para a mãozinha de clique*/
+        
+        /*Prepara o botão para uma transição suave de cor*/
+        transition: background-color 0.3s ease, transform 0.1s ease;
+        margin-right: 10px;        /*Dá um espaco entre um botão e outro*/
+    }
+
+    .btn:hover {
+        background-color: #45a049; /*Deixa o botão um pouco mais escuro quando o mouse passar por cima*/
+    }
+
+    .btn:active {
+        transform: scale(0.95);    /*Encolhe o botão em 5% para dar sensação de clique físico*/
+    }
+</style>
+
+    <div id="controles">
+        <button id="btnDFS" class="btn">DFS (Busca em Profundidade)</button>
+        <button id="btnBFS" class="btn">BFS (Busca em Largura)</button>
+        <button id="btnAStar" class="btn">A* (Busca A Estrela)</button>
+        <button id="btnGreedy" class="btn">Greedy (Algoritmo Guloso)</button>
+        <button id="btnDijkstra" class="btn">Dijkstra (Busca de Custo Uniforme)</button>
+        <button id="btnReset" class="btn">Resetar Ambiente</button>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
     
@@ -19,6 +55,7 @@
     
     <script src="terrain.js"></script>
     <script src="dfs.js"></script>
+    <script src="bfs.js"></script>
     <script src="environment.js"></script>
     
     <script src="sketch.js"></script>
