@@ -130,8 +130,7 @@ class Environment {
     let startIdx = this.getCellIndex(this.vehicle.pos);
     let targetIdx = this.getCellIndex(this.target.pos);
 
-    //this.currentSearch = new DFS(startIdx, targetIdx, this.walkable);
-    this.currentSearch = new BCU(startIdx, targetIdx, this.walkable);
+    this.currentSearch = new DFS(startIdx, targetIdx, this.walkable);
 
     this.isSearching = true; 
 
