@@ -16,6 +16,7 @@ class Environment {
 
   setup() {
     this.foodCount = 0;
+    document.getElementById('foodScore').innerText = this.foodCount;
     this.currentSearch = null;
     this.isSearching = false;
 
@@ -52,6 +53,8 @@ class Environment {
       this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 8)
       this.foodCount++;
       print("food:" + this.foodCount);
+
+      document.getElementById('foodScore').innerText = this.foodCount;
 
       this.startNewSearch();
     }
@@ -115,6 +118,11 @@ class Environment {
   }
 
   startNewSearch() {
+    document.getElementById('pathCost').innerText = "...";
+    document.getElementById('timeScore').innerText = "0";
+
+    this.iterations = 0;
+
     for(let i=0; i<this.rows; i++) {
       for(let j=0; j<this.columns; j++) {
           this.walkable[i][j].isVisited = false;
@@ -170,41 +178,52 @@ class Environment {
 
   stateMachine() {
     if (this.isSearching) {
-        this.currentSearch.step();
-          if (this.currentSearch.isFinished) {
-            this.isSearching = false;
-            for (let p of this.currentSearch.finalPath) {
-              this.walkable[p.x][p.y].isPath = true;
-            }
-          }
+      this.currentSearch.step();
+
+      if (!this.currentSearch.isFinished) {
+        this.iterations++;
+        document.getElementById('timeScore').innerText = this.iterations;
+      }
+
+      if (this.currentSearch.isFinished) {
+        this.isSearching = false;
+
+        let totalCost = 0;
+
+        for (let p of this.currentSearch.finalPath) {
+          this.walkable[p.x][p.y].isPath = true;
+          totalCost += this.walkable[p.x][p.y].cost;
+        }
+
+        document.getElementById('pathCost').innerText = totalCost;
+      }
     } else {
-        let currPos = this.getCellIndex(this.vehicle.pos)
-      
-        if (currPos.x >= 0 && currPos.x < this.rows && currPos.y >= 0 && currPos.y < this.columns) {
-          let currCell = this.walkable[currPos.x][currPos.y]
-          
-          if (currCell.terrainType == 'Sand') {
-              this.vehicle.maxSpeed = 6
-            } else if (currCell.terrainType == 'Quagmire') {
-              this.vehicle.maxSpeed = 4
-            } else {
-              this.vehicle.maxSpeed = 2
-            }
-        }
-
-
-        if (this.currentSearch && this.currentSearch.finalPath && this.pathIndex < this.currentSearch.finalPath.length) {
-          let nextStep = this.currentSearch.finalPath[this.pathIndex];
-
-          let cell = this.walkable[nextStep.x][nextStep.y];
-
-          this.vehicle.seek(cell.target);
-
-          if (this.vehicle.didReachTarget(cell.target)) {
-            this.pathIndex++;
-            cell.color.setAlpha(100)
+      let currPos = this.getCellIndex(this.vehicle.pos)
+    
+      if (currPos.x >= 0 && currPos.x < this.rows && currPos.y >= 0 && currPos.y < this.columns) {
+        let currCell = this.walkable[currPos.x][currPos.y]
+        
+        if (currCell.terrainType == 'Sand') {
+            this.vehicle.maxSpeed = 6
+          } else if (currCell.terrainType == 'Quagmire') {
+            this.vehicle.maxSpeed = 4
+          } else {
+            this.vehicle.maxSpeed = 2
           }
+      }
+
+      if (this.currentSearch && this.currentSearch.finalPath && this.pathIndex < this.currentSearch.finalPath.length) {
+        let nextStep = this.currentSearch.finalPath[this.pathIndex];
+
+        let cell = this.walkable[nextStep.x][nextStep.y];
+
+        this.vehicle.seek(cell.target);
+
+        if (this.vehicle.didReachTarget(cell.target)) {
+          this.pathIndex++;
+          cell.color.setAlpha(100)
         }
+      }
     }
   }
 
