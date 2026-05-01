@@ -1,8 +1,8 @@
 const TerrainType = {
-  Sand: 'Sand',
-  Quagmire: 'Quagmire',
-  Water: 'Water',
-  Obstacle: 'Obstacle'
+    Sand: 'Sand',
+    Quagmire: 'Quagmire',
+    Water: 'Water',
+    Obstacle: 'Obstacle'
 };
 
 class TerrainCells {
@@ -13,7 +13,7 @@ class TerrainCells {
         this.isFrontier = false
         this.isPath = false
 
-        switch(terrainType) {
+        switch (terrainType) {
             case 'Sand':
                 this.color = color(245, 185, 65);
                 this.cost = 10
@@ -34,7 +34,7 @@ class TerrainCells {
         }
     }
 
-    setVisited(){
+    setVisited() {
         this.visited = true;
     }
 }

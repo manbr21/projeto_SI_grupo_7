@@ -5,50 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulação de Agentes Autônomos</title>
 
-    <style>
-    .btn {
-        background-color: #4CAF50; 
-        color: white;             
-        padding: 12px 24px;        
-        font-size: 16px;           
-        font-family: Arial, sans-serif;
-        font-weight: bold;
-        
-        border: none;              /*Remove a borda padrão do navegador*/
-        border-radius: 8px;        /*Deixa os cantos arredondados*/
-        cursor: pointer;           /*Muda a setinha do mouse para a mãozinha de clique*/
-        
-        /*Prepara o botão para uma transição suave de cor*/
-        transition: background-color 0.3s ease, transform 0.1s ease;
-        margin-right: 10px;        /*Dá um espaco entre um botão e outro*/
-    }
-
-    .btn:hover {
-        background-color: #45a049; /*Deixa o botão um pouco mais escuro quando o mouse passar por cima*/
-    }
-
-    .btn:active {
-        transform: scale(0.95);    /*Encolhe o botão em 5% para dar sensação de clique físico*/
-    }
-</style>
-
-    <div id="controles">
-        <button id="btnDFS" class="btn">DFS (Busca em Profundidade)</button>
-        <button id="btnBFS" class="btn">BFS (Busca em Largura)</button>
-        <button id="btnAStar" class="btn">A* (Busca A Estrela)</button>
-        <button id="btnGreedy" class="btn">Greedy (Algoritmo Guloso)</button>
-        <button id="btnDijkstra" class="btn">Dijkstra (Busca de Custo Uniforme)</button>
-        <button id="btnReset" class="btn">Resetar Ambiente</button>
-    </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
     
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <main>
-    </main>
+
+    <body>
+    <div id="app">
+      
+      <aside id="sidebar">
+        <h2>Controles</h2>
+        
+        <div class="control-group">
+          <label for="algoSelect">Algoritmo de Busca:</label>
+          <select id="algoSelect">
+            <option value="BFS">Busca em Largura (BFS)</option>
+            <option value="DFS">Busca em Profundidade (DFS)</option>
+            <option value="BCU">Busca de Custo Uniforme (BCU)</option>
+            <option value="GREEDY">Busca Gulosa</option>
+            <!-- <option value="ASTAR">A* (A-Estrela)</option> -->
+          </select>
+        </div>
+
+        <button id="btnPlayPause" class="action-btn">Pausar Simulação</button>
+        <button id="btnRepetir" class="action-btn outline">Repetir (Mesmo Mapa)</button>
+        <button id="btnNovoMapa" class="action-btn outline">Gerar Novo Mapa</button>
+        
+        <div class="stats">
+          <p>Comida Coletada: <strong id="foodScore">0</strong></p>
+          <p>Custo do Caminho: <strong id="pathCost">0</strong></p>
+          <p>Nós Explorados (Tempo): <strong id="timeScore">0</strong></p>
+        </div>
+
+        <div class="legend">
+          <h3>Legenda (Custos)</h3>
+          <div class="legend-item"><span class="color-box" style="background-color: rgb(245, 185, 65);"></span> Areia (10)</div>
+          <div class="legend-item"><span class="color-box" style="background-color: rgb(105, 190, 70);"></span> Atoleiro (50)</div>
+          <div class="legend-item"><span class="color-box" style="background-color: rgb(40, 150, 230);"></span> Água (100)</div>
+          <div class="legend-item"><span class="color-box" style="background-color: rgb(130, 130, 130);"></span> Obstáculo (∞)</div>
+        </div>
+      </aside>
+
+      <main id="canvas-container">
+      </main>
+
+    </div>
     
     <script src="target.js"></script>
     <script src="vehicle.js"></script>
