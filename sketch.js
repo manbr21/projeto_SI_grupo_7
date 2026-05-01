@@ -32,6 +32,10 @@ function setup() {
     env.resetCurrentSearch();
   });
 
+  document.getElementById('algoSelect').addEventListener('change', () => {
+    env.resetCurrentSearch();
+  });
+
   let isPaused = false;
   document.getElementById('btnPlayPause').addEventListener('click', (e) => {
     isPaused = !isPaused;
