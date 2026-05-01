@@ -130,9 +130,11 @@ class Environment {
     let startIdx = this.getCellIndex(this.vehicle.pos);
     let targetIdx = this.getCellIndex(this.target.pos);
     
-    env.currentSearch = new DFS(startIdx, targetIdx, env.walkable);
+    this.currentSearch = new GreedySearch(startIdx, targetIdx, this.walkable);
     
     this.isSearching = true
+
+    this.pathIndex = 0
   }
 
   stateMachine() {
