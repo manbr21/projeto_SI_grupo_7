@@ -53,6 +53,7 @@ O projeto segue uma adaptação da arquitetura **MVC (Model-View-Controller)**, 
         ├── bcu.js
         ├── greedySearch.js
         └── AStar.js
+```
 
 ---
 
