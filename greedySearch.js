@@ -43,8 +43,7 @@ class GreedySearch {
     }
 
     heuristicFunction(node) {
-        let dist = Math.sqrt((node.x - this.target.x) ** 2 + (node.y - this.target.y) ** 2);
-        return dist;
+        return (Math.abs(node.x - this.target.x) + Math.abs(node.y - this.target.y))*20;
     }
 
     canVisit(x, y) {

@@ -148,6 +148,8 @@ class Environment {
       this.currentSearch = new BCU(startIdx, targetIdx, this.walkable);
     } else if (selectedAlgo === 'GREEDY') {
       this.currentSearch = new GreedySearch(startIdx, targetIdx, this.walkable);
+    } else if (selectedAlgo === 'ASTAR') {
+      this.currentSearch = new AStar(startIdx, targetIdx, this.walkable);
     }
 
     this.isSearching = true

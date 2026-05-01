@@ -16,15 +16,15 @@ class TerrainCells {
         switch (terrainType) {
             case 'Sand':
                 this.color = color(245, 185, 65);
-                this.cost = 10
+                this.cost = 5
                 break;
             case 'Quagmire':
                 this.color = color(105, 190, 70);
-                this.cost = 50
+                this.cost = 25
                 break;
             case 'Water':
                 this.color = color(40, 150, 230);
-                this.cost = 100
+                this.cost = 50
                 break;
             default:
                 this.color = color(130, 130, 130);
