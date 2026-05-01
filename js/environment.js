@@ -118,8 +118,8 @@ class Environment {
   }
 
   startNewSearch() {
-    document.getElementById('pathCost').innerText = "...";
-    document.getElementById('timeScore').innerText = "0";
+    this.iterations = 0; 
+    this.pathCost = 0;
 
     this.iterations = 0;
 

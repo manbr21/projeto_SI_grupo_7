@@ -61,4 +61,37 @@ function draw() {
   env.drawVehicle()
   env.drawTarget()
   env.stateMachine()
+
+  updateUI();
+}
+
+let lastFood = -1;
+let lastTime = -1;
+let lastCost = -1;
+
+function updateUI() {
+  if (env.foodCount !== lastFood) {
+    document.getElementById('foodScore').innerText = env.foodCount;
+    lastFood = env.foodCount;
+  }
+
+  if (env.iterations !== lastTime) {
+    document.getElementById('timeScore').innerText = env.iterations;
+    lastTime = env.iterations;
+  }
+
+  if (!env.isSearching && env.currentSearch && env.currentSearch.isFinished) {
+    let totalCost = 0;
+    for (let p of env.currentSearch.finalPath) {
+      totalCost += env.walkable[p.x][p.y].cost;
+    }
+
+    if (totalCost !== lastCost) {
+      document.getElementById('pathCost').innerText = totalCost;
+      lastCost = totalCost;
+    }
+  } else if (env.isSearching && lastCost !== "...") {
+    document.getElementById('pathCost').innerText = "...";
+    lastCost = "...";
+  }
 }
