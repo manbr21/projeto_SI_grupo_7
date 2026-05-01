@@ -129,8 +129,18 @@ class Environment {
 
     let startIdx = this.getCellIndex(this.vehicle.pos);
     let targetIdx = this.getCellIndex(this.target.pos);
+
+    let selectedAlgo = document.getElementById('algoSelect').value;
     
-    this.currentSearch = new GreedySearch(startIdx, targetIdx, this.walkable);
+    if (selectedAlgo === 'DFS') {
+      this.currentSearch = new DFS(startIdx, targetIdx, this.walkable);
+    } else if (selectedAlgo === 'BFS') {
+      this.currentSearch = new BFS(startIdx, targetIdx, this.walkable);
+    } else if (selectedAlgo === 'BCU') {
+      this.currentSearch = new BCU(startIdx, targetIdx, this.walkable);
+    } else if (selectedAlgo === 'GREEDY') {
+      this.currentSearch = new GreedySearch(startIdx, targetIdx, this.walkable);
+    }
     
     this.isSearching = true
 
