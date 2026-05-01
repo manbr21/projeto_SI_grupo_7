@@ -22,7 +22,6 @@ Projeto de simulação de um agente autônomo que navega por um terreno gerado p
   * Busca Gulosa (Greedy Search)
 * **Interface Interativa (UI/UX):**
   * Troca de algoritmos em tempo real no mesmo mapa para fins de comparação.
-  * Controle de velocidade da animação (Slider para avançar múltiplos passos por frame).
   * Painel de estatísticas ao vivo: Contagem de comida, Custo total do caminho e Tempo de execução (medido em iterações/nós explorados).
   * Legenda de terrenos com seus respectivos custos.
 
@@ -30,7 +29,7 @@ Projeto de simulação de um agente autônomo que navega por um terreno gerado p
 
 ## Estrutura do Projeto
 
-O projeto segue uma adaptação da arquitetura **MVC (Model-View-Controller)** para motores gráficos, com o uso de **FSM (Máquina de Estados Finita)** para controle das fases de busca e movimento do agente.
+O projeto segue uma adaptação da arquitetura **MVC (Model-View-Controller)**, com o uso de **FSM (Máquina de Estados Finita)** para controle das fases de busca e movimento do agente.
 ```text
 /projeto_SI
 │
