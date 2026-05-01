@@ -54,3 +54,24 @@ O projeto segue uma adaptação da arquitetura **MVC (Model-View-Controller)** p
         ├── bcu.js
         ├── greedySearch.js
         └── AStar.js
+
+---
+
+## Como Rodar o Projeto no VS Code
+
+Para visualizar a simulação localmente, siga os passos abaixo:
+
+1. **Abrir o Projeto:** Abra a pasta raiz do projeto no seu VS Code.
+2. **Instalar Extensão:** Certifique-se de que a extensão **Live Server** (de Ritwick Dey) está instalada.
+3. **Iniciar Servidor:** Clique no botão **"Go Live"** localizado na barra de status no canto inferior direito do VS Code.
+4. **Visualização:** O navegador abrirá automaticamente exibindo o projeto.
+
+---
+
+## Observações Importantes
+
+### Configuração do Grid (Células)
+O mapa é responsivo e se ajusta automaticamente ao espaço disponível na tela, mantendo a integridade visual. Ao ajustar as variáveis rows (linhas) e columns (colunas) no código do sketch.js, é fundamental levar em conta a proporção da tela onde o projeto será exibido.
+
+* **Proporção Padrão:** O projeto foi configurado considerando uma tela base de proporção 16:9 (48 colunas x 27 linhas).
+* **Dica:** Se você estiver utilizando uma tela com proporção diferente ou alterar drasticamente o tamanho do menu lateral, ajuste o número de células no código para evitar que as áreas de varredura fiquem deformadas ou fora de escala.
