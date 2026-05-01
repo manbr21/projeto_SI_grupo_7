@@ -1,11 +1,27 @@
-let env
+let env;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let container = document.getElementById('canvas-container');
+  let availableW = container.clientWidth;
+  let availableH = container.clientHeight;
+
+  let ratio = 48 / 27; 
+  let canvasW = availableW;
+  let canvasH = availableW / ratio;
+
+  if (canvasH > availableH) {
+    canvasH = availableH;
+    canvasW = canvasH * ratio;
+  }
+
+  let canvas = createCanvas(canvasW, canvasH);
+  canvas.parent('canvas-container');
+
   let rows = 48;
   let columns = 27;
-  env = new Environment(windowWidth, windowHeight, rows, columns)
-  env.setup()
+  
+  env = new Environment(width, height, rows, columns);
+  env.setup();
 }
 
 function draw() {
