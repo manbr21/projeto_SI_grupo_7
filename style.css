@@ -1,7 +1,35 @@
 html, body {
   margin: 0;
   padding: 0;
+  overflow: hidden; /* Evita aquelas barras de rolagem chatas */
+  background-color: #1e1e1e; /* Um fundo escuro bonito */
+  font-family: sans-serif;
 }
+
+#app {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+#sidebar {
+  width: 300px;
+  background-color: #2b2b2b;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  border-right: 2px solid #444;
+  flex-shrink: 0; 
+}
+
+#canvas-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 canvas {
   display: block;
+  box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
 }
