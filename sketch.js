@@ -22,6 +22,29 @@ function setup() {
   
   env = new Environment(width, height, rows, columns);
   env.setup();
+
+  document.getElementById('btnNovoMapa').addEventListener('click', () => {
+    env = new Environment(width, height, rows, columns);
+    env.setup();
+  });
+
+  document.getElementById('btnRepetir').addEventListener('click', () => {
+    env.resetCurrentSearch();
+  });
+
+  let isPaused = false;
+  document.getElementById('btnPlayPause').addEventListener('click', (e) => {
+    isPaused = !isPaused;
+    if (isPaused) {
+      noLoop();
+      e.target.innerText = "▶ Retomar Simulação";
+      e.target.style.backgroundColor = "#ff9800";
+    } else {
+      loop();
+      e.target.innerText = "Pausar Simulação";
+      e.target.style.backgroundColor = "#4CAF50";
+    }
+  });
 }
 
 function draw() {
