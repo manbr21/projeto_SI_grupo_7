@@ -137,6 +137,27 @@ class Environment {
     this.pathIndex = 0
   }
 
+  resetCurrentSearch() {
+    for(let i=0; i<this.rows; i++) {
+      for(let j=0; j<this.columns; j++) {
+          this.walkable[i][j].isVisited = false;
+          this.walkable[i][j].isFrontier = false;
+          this.walkable[i][j].isPath = false;
+          this.walkable[i][j].color.setAlpha(255);
+      }
+    }
+
+    this.vehicle.vel.set(0, 0);
+    this.vehicle.acc.set(0, 0);
+
+    if (this.currentSearch) {
+       let startIdx = this.currentSearch.initial_pos;
+       this.vehicle.pos.set(this.walkable[startIdx.x][startIdx.y].target.pos.x, this.walkable[startIdx.x][startIdx.y].target.pos.y);
+    }
+
+    this.startNewSearch();
+  }
+
   stateMachine() {
     if (this.isSearching) {
         this.currentSearch.step();
