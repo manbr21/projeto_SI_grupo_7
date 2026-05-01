@@ -54,7 +54,7 @@ class Vehicle {
       this.pos.y = height + this.r;
     }
   }
-  
+
   didReachTarget(target) {
     let d = p5.Vector.dist(this.pos, target.pos);
     return d < 10

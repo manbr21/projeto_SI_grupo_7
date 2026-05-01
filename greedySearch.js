@@ -1,11 +1,11 @@
 class GreedySearch {
-    constructor(initial_pos, target, matrix){
+    constructor(initial_pos, target, matrix) {
         this.initial_pos = initial_pos;
         this.target = target;
         this.matrix = matrix;
 
         this.queue = new PriorityQueue();
-        this.queue.push({ pos: initial_pos, path: [] } , this.heuristicFunction(initial_pos));
+        this.queue.push({ pos: initial_pos, path: [] }, this.heuristicFunction(initial_pos));
 
         this.isFinished = false;
         this.finalPath = [];
@@ -18,9 +18,9 @@ class GreedySearch {
         let x = current.value.pos.x;
         let y = current.value.pos.y;
 
-        if(x === this.target.x && y === this.target.y) {
+        if (x === this.target.x && y === this.target.y) {
             this.isFinished = true;
-            this.finalPath = [...current.value.path, createVector(x, y)]; 
+            this.finalPath = [...current.value.path, createVector(x, y)];
             return;
         }
 
@@ -34,7 +34,7 @@ class GreedySearch {
             createVector(x - 1, y)
         ];
 
-        for(let n of neighbors){
+        for (let n of neighbors) {
             if (this.canVisit(n.x, n.y)) {
                 this.matrix[n.x][n.y].isFrontier = true;
                 this.queue.push({ pos: n, path: [...current.value.path, createVector(x, y)] }, this.heuristicFunction(n));
@@ -45,19 +45,19 @@ class GreedySearch {
     heuristicFunction(node) {
         let dist = Math.sqrt((node.x - this.target.x) ** 2 + (node.y - this.target.y) ** 2);
         return dist;
-    } 
+    }
 
-    canVisit(x, y){
-        if(x < 0 || x >= this.matrix.length || y < 0 || y >= this.matrix[0].length){
+    canVisit(x, y) {
+        if (x < 0 || x >= this.matrix.length || y < 0 || y >= this.matrix[0].length) {
             return false;
         }
-        if(this.matrix[x][y].isVisited){
+        if (this.matrix[x][y].isVisited) {
             return false;
         }
-        if(this.matrix[x][y].isFrontier){
+        if (this.matrix[x][y].isFrontier) {
             return false;
         }
-        if(this.matrix[x][y].terrainType === 'Obstacle'){
+        if (this.matrix[x][y].terrainType === 'Obstacle') {
             return false;
         }
 

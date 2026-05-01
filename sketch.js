@@ -5,7 +5,7 @@ function setup() {
   let availableW = container.clientWidth;
   let availableH = container.clientHeight;
 
-  let ratio = 48 / 27; 
+  let ratio = 48 / 27;
   let canvasW = availableW;
   let canvasH = availableW / ratio;
 
@@ -19,7 +19,7 @@ function setup() {
 
   let rows = 48;
   let columns = 27;
-  
+
   env = new Environment(width, height, rows, columns);
   env.setup();
 
@@ -55,7 +55,7 @@ function draw() {
   background(0);
   fill(255, 0, 0);
   noStroke();
-  
+
   env.didVehicleReachFood()
   env.drawMatrix()
   env.drawVehicle()
