@@ -96,3 +96,31 @@ select {
   border-radius: 4px;
   border-left: 4px solid #4CAF50;
 }
+
+.legend {
+  margin-top: 20px;
+  background-color: #222;
+  padding: 15px;
+  border-radius: 4px;
+}
+.legend h3 {
+  margin-top: 0;
+  font-size: 14px;
+  color: #ccc;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #ddd;
+}
+.color-box {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  border-radius: 2px;
+  border: 1px solid #000;
+}
