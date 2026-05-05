@@ -5,7 +5,10 @@ function setup() {
   let availableW = container.clientWidth;
   let availableH = container.clientHeight;
 
-  let ratio = 48 / 27;
+  let rows = 48;
+  let columns = 27;
+
+  let ratio = rows / columns;
   let canvasW = availableW;
   let canvasH = availableW / ratio;
 
@@ -16,9 +19,6 @@ function setup() {
 
   let canvas = createCanvas(canvasW, canvasH);
   canvas.parent('canvas-container');
-
-  let rows = 48;
-  let columns = 27;
 
   env = new Environment(width, height, rows, columns);
   env.setup();

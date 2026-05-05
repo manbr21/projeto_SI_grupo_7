@@ -20,13 +20,15 @@ class Environment {
     this.currentSearch = null;
     this.isSearching = false;
 
+    let cellSize = this.w / this.rows;
+
     let randomIFood, randomJFood;
     do {
       randomIFood = floor(random(this.rows))
       randomJFood = floor(random(this.columns))
     } while (this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
 
-    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 10)
+    this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, cellSize*0.25)
 
     let randomIAgent, randomJAgent;
     do {
@@ -34,7 +36,7 @@ class Environment {
       randomJAgent = floor(random(this.columns))
     } while (this.walkable[randomIAgent][randomJAgent].terrainType === "Obstacle")
 
-    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y, 12);
+    this.vehicle = new Vehicle(this.walkable[randomIAgent][randomJAgent].target.pos.x, this.walkable[randomIAgent][randomJAgent].target.pos.y, cellSize*0.35);
 
     this.startNewSearch();
   }
@@ -43,6 +45,7 @@ class Environment {
     if (this.vehicle.didReachTarget(this.target)) {
 
       this.vehicle.pos.set(this.target.pos.x, this.target.pos.y);
+      let cellSize = this.w / this.rows;
 
       let randomIFood, randomJFood;
       do {
@@ -50,7 +53,7 @@ class Environment {
         randomJFood = floor(random(this.columns))
       } while (this.walkable[randomIFood][randomJFood].terrainType === "Obstacle");
 
-      this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, 8)
+      this.target = new Target(this.walkable[randomIFood][randomJFood].target.pos.x, this.walkable[randomIFood][randomJFood].target.pos.y, cellSize*0.25)
       this.foodCount++;
       print("food:" + this.foodCount);
 
